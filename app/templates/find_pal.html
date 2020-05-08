@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+<h2>Find your pal</h2>
+<div class="row">
+    <div class="col-md-4">
+        {{ wtf.quick_form(form) }}
+    </div>
+</div>
+
+
+<div class="container">
+
+{% if taskers %}
+    <h2>Taskers</h2>
+    {% for tasker in taskers %}
+      <hr>
+      <div class="media">
+        <div class="media-left media-middle">
+          <img src="{{ tasker.user.avatar(16) }}" class="media-object" style="width:80px">
+        </div>
+        <div class="media-body">
+          <h4 class="media-heading"><a href="pal_profile/{{ tasker.id }}">{{ tasker.cname }} </a></h4>
+            {% if tasker.price_per_hour %}
+            <strong>{{ tasker.price_per_hour }} €/h</strong>
+            {% endif %}
+          <p> {{ tasker.description }}</p>
+        </div>
+      </div>
+        <br>
+        <a href="/book_pal/{{ tasker.id }}" class="btn btn-primary" role="button">Book this pal</a>
+      <hr>
+    {% endfor %}
+{% endif %}
+</div>
+{% endblock %}

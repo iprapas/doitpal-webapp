@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+
+
+
+    <h1>Your pal profile</h1>
+
+<div class="container">
+  <ul class="nav nav-pills">
+    <li class="active"><a data-toggle="pill" href="#home">Basic Info</a></li>
+    <li><a data-toggle="pill" href="#menu1">Serving Areas</a></li>
+    <li><a data-toggle="pill" href="#menu2">View Bookings</a></li>
+  </ul>
+
+  <div class="tab-content">
+    <div id="home" class="tab-pane fade in active">
+        <p><b>Company name</b> - {{tasker.cname}}</p>
+        <p><b>Description</b> - {{tasker.description}}</p>
+        <p><b>Tasker Category</b> - {{tasker.category}}</p>
+    </div>
+    <div id="menu1" class="tab-pane fade">
+
+        <h1>{{ 'Add serving area' }}</h1>
+        <div class="row">
+            <div class="col-md-4">
+                {{ wtf.quick_form(form) }}
+            </div>
+        </div>
+        <h2>Serving Areas</h2>
+        <div class="list-group">
+        {% for serving_area in tasker.serving_areas%}
+            <li class="list-group-item">{{ serving_area.nborhood}}</li>
+        {% endfor %}
+        </div>
+
+    </div>
+    <div id="menu2" class="tab-pane fade">
+        <h3>Current Bookings</h3>
+        {% for booking in tasker.bookings %}
+          <hr>
+      <div class="media">
+        <div class="media-left media-middle">
+          <img src="{{ booking.user.avatar(16) }}" class="media-object" style="width:80px">
+        </div>
+        <div class="media-body">
+            <h4 class="media-heading"><a href="user_profile/{{ booking.user_id }}">{{ booking.user.username}} </a></h4>
+          <p> {{ booking.start_time}}:  {{ booking.description}}</p>
+        </div>
+      </div>
+        <br>
+        {% if booking.review  %}
+            <a href="/show_review/{{ booking.id }}" class="btn btn-primary" role="button">Show review</a>
+        {% else %}
+            <a href="/review_pal/{{ booking.id }}" class="btn btn-primary" role="button">Review</a>
+        {% endif %}
+      <hr>
+        {% endfor %}
+        <h3>Old Bookings</h3>
+        {% for booking in tasker.bookings %}
+              <hr>
+      <div class="media">
+        <div class="media-left media-middle">
+          <img src="{{ booking.user.avatar(16) }}" class="media-object" style="width:80px">
+        </div>
+        <div class="media-body">
+            <h4 class="media-heading"><a href="user_profile/{{ booking.user_id }}">{{ booking.user.username}} </a></h4>
+          <p> {{ booking.start_time}}:  {{ booking.description}}</p>
+        </div>
+      </div>
+        <br>
+        <a href="/review_pal/{{ booking.tasker.id }}" class="btn btn-primary" role="button">Review this pal</a>
+      <hr>
+        {% endfor %}
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock %}

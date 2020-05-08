@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+
+
+
+    <h1>Your pal profile</h1>
+
+<div class="container">
+  <ul class="nav nav-pills">
+    <li><a href={{url_for("main.pal_profile")}}>Basic Info</a></li>
+    <li class="active"><a data-toggle="pill">View Bookings</a></li>
+  </ul>
+  <br>
+  <ul class="nav nav-pills">
+    <li><a href={{url_for("main.pal_curr_bookings")}}>Current bookings</a></li>
+    <li class="active"><a data-toggle="pill">Past bookings</a></li>
+  </ul>
+
+
+    <div id="menu2" class="tab-pane fade in active">
+        {% for booking in bookings %}
+          <hr>
+      <div class="media">
+        <div class="media-left media-middle">
+          <img src="{{ booking.user.avatar(16) }}" class="media-object" style="width:80px">
+        </div>
+        <div class="media-body">
+            <h4 class="media-heading"><a href="user_profile/{{ booking.user_id }}">{{ booking.user.username}} </a></h4>
+          <p> {{ booking.start_time}}:  {{ booking.description}}</p>
+          {% if booking.review  %}
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Overall rating</th>
+                <th>Clean rating</th>
+                <th>Quality rating</th>
+                <th>Price rating</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{ booking.review[0].overall_rating }}</td>
+                <td>{{ booking.review[0].clean_rating }}</td>
+                <td>{{ booking.review[0].quality_rating }}</td>
+                <td>{{ booking.review[0].price_rating }}</td>
+              </tr>
+            </tbody>
+          </table>
+      <p> <b>Review: </b> {{ booking.review[0].body }}</p>
+        {% else %}
+          <p>No review registered for this booking...</p>
+        {% endif %}
+        </div>
+      </div>
+
+      <hr>
+        {% endfor %}
+
+  <ul class=pagination>
+  {% for page in pagination.iter_pages() %}
+    {% if page %}
+      {% if page != pagination.page %}
+        <li><a href="{{ url_for('main.pal_past_bookings', page=page) }}">{{ page }}</a></li>
+      {% else %}
+        <li class="active"><a href="#">{{ page }}</a></li>
+      {% endif %}
+    {% else %}
+      <li  class="disabled"><a href="#">…</a></li>
+    {% endif %}
+  {% endfor %}
+  </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+
+{% endblock %}

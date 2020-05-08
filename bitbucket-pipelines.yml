@@ -1,0 +1,21 @@
+image: atlassian/default-image:2
+
+pipelines:
+  default:
+    - step:
+        script:
+          - echo "Everything is awesome!"
+          - zip -r application.zip .
+          - pipe: atlassian/aws-elasticbeanstalk-deploy:0.3.0
+            variables:
+                    AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+                    AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+                    AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION
+                    APPLICATION_NAME: 'flask-app2'
+                    ENVIRONMENT_NAME: 'doitpal2'
+                    ZIP_FILE: 'application.zip'
+                    S3_BUCKET: 'doitpal' # Optional.
+                    # VERSION_LABEL: 'deploy-' # Optional.
+                    # WAIT: '<boolean>' # Optional.
+                    # WAIT_INTERVAL: '<integer>' # Optional.
+                    DEBUG: 'TRUE' # Optional.

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+
+
+
+    <h1>Your pal profile</h1>
+
+<div class="container">
+  <ul class="nav nav-pills">
+    <li class="active"><a data-toggle="pill" href="#home">Basic Info</a></li>
+    <li><a href={{url_for('main.pal_curr_bookings')}}>View Bookings</a></li>
+  </ul>
+
+  <div class="tab-content">
+    <div id="home" class="tab-pane fade in active">
+        <p><b>Company name</b> - {{tasker.cname}}</p>
+        <p><b>Description</b> - {{tasker.description}}</p>
+        <p><b>Tasker Category</b> - {{tasker.category}}</p>
+    </div>
+      <h1>{{ 'Add serving area' }}</h1>
+        <div class="row">
+            <div class="col-md-4">
+                {{ wtf.quick_form(form) }}
+            </div>
+        </div>
+        <h2>Serving Areas {{ tasker.avg_rating }}</h2>
+        <div class="list-group">
+        {% for serving_area in tasker.serving_areas%}
+            <li class="list-group-item">{{ serving_area.nborhood}}</li>
+        {% endfor %}
+        </div>
+
+
+
+    </div>
+
+  </div>
+</div>
+
+
+
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+
+<h1>User Profile</h1>
+<div class="container">
+  <ul class="nav nav-pills">
+    <li class="active"><a data-toggle="pill" href="#home">Home</a></li>
+    <li><a data-toggle="pill" href="#menu1">Edit neighborhood</a></li>
+    <li><a data-toggle="pill" href="#menu2">View Bookings</a></li>
+  </ul>
+
+  <div class="tab-content">
+    <div id="home" class="tab-pane fade in active">
+        <h3>Hello, {{ user.username }}!</h3>
+        <p>username: {{ user.username }}</p>
+        <p>email: {{ user.email}}</p>
+    </div>
+    <div id="menu1" class="tab-pane fade">
+        <h3>{{ 'Edit Profile' }}</h3>
+        <div class="row">
+            <div class="col-md-4">
+                {{ wtf.quick_form(form) }}
+            </div>
+        </div>
+    </div>
+    <div id="menu2" class="tab-pane fade">
+        {% if new_bookings %}
+            <h3>Current Bookings</h3>
+        {% endif %}
+        {% for booking in new_bookings %}
+      <hr>
+      <div class="media">
+        <div class="media-left media-middle">
+          <img src="{{ booking.tasker.user.avatar(16) }}" class="media-object" style="width:80px">
+        </div>
+        <div class="media-body">
+            <h4 class="media-heading"><a href="pal_profile/{{ booking.tasker_id }}">{{ booking.tasker.cname }} </a></h4>
+          <p> {{ booking.start_time}}:  {{ booking.description}}</p>
+        </div>
+      </div>
+        <br>
+
+      <hr>
+        {% endfor %}
+        {% if old_bookings %}
+            <h3>Old Bookings</h3>
+        {% endif %}
+        {% for booking in old_bookings %}
+      <hr>
+      <div class="media">
+        <div class="media-left media-middle">
+          <img src="{{ booking.tasker.user.avatar(16) }}" class="media-object" style="width:80px">
+        </div>
+        <div class="media-body">
+            <h4 class="media-heading"><a href="pal_profile/{{ booking.tasker_id }}">{{ booking.tasker.cname }} </a></h4>
+          <p> {{ booking.start_time}}:  {{ booking.description}}</p>
+        </div>
+      </div>
+        <br>
+        {% if booking.review %}
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Overall rating</th>
+                <th>Clean rating</th>
+                <th>Quality rating</th>
+                <th>Price rating</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{ booking.review[0].overall_rating }}</td>
+                <td>{{ booking.review[0].clean_rating }}</td>
+                <td>{{ booking.review[0].quality_rating }}</td>
+                <td>{{ booking.review[0].price_rating }}</td>
+              </tr>
+            </tbody>
+          </table>
+      <p> <b>Review: </b> {{ booking.review[0].body }}</p>
+        {% else %}
+        <a href="/review_booking/{{ booking.id }}" class="btn btn-primary" role="button">Review this booking</a>
+        {% endif %}      <hr>
+        {% endfor %}
+        {% endblock %}
+    </div>
+  </div>
+</div>
+
+
+
+
